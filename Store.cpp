@@ -18,7 +18,6 @@ void Store::addMember(Customer* c) {
 // returns pointer to product with matching ID.  Returns NULL if no matching ID is found.
 Product* Store::getProductFromID(string productID) {
   for(int index = 0; index < inventory.size(); index++) {
-    // Product prodToCompare = *(inventory[index]);
     if (productID == inventory[index]->getIdCode()) {
       return inventory[index];
     }
@@ -39,9 +38,11 @@ Customer* Store::getMemberFromID(string memberID) {
 // for every product whose title or description contains the search string, 
 // prints out that product's title, ID code, price and description
 // case insensitive
-void Store::productSearch(string str) {
-
-}
+// void Store::productSearch(string str) {
+//   for (int index = 0; index < inventory.size(); index++) {
+//     if ()
+//   }
+// }
 
 void Store::addProductToMemberCart(string pID, string mID) {
 
@@ -53,10 +54,16 @@ void Store::checkOutMember(string mID) {
 
 
 int main() {
-
+  Product* prod;
   Store testStore;
+  Product newp("10000002", "Cheese Whiz", "Great on crackers!", 4.99, 10);
+  prod = &newp;
 
   cout << endl << "In Main" << endl;
+  Store newStore;
+  newStore.addProduct(prod);
+  cout << prod << endl;
+  cout << newStore.getProductFromID("10000002") << endl;
 
   return 0;
 }
