@@ -37,12 +37,26 @@ Customer* Store::getMemberFromID(string memberID) {
 
 // for every product whose title or description contains the search string, 
 // prints out that product's title, ID code, price and description
-// case insensitive
-// void Store::productSearch(string str) {
-//   for (int index = 0; index < inventory.size(); index++) {
-//     if ()
-//   }
-// }
+// the search function will be case insensitive
+void Store::productSearch(string str) {
+  // str[0] = tolower(str[0]);
+  cout << endl << "Searching for: " << str << endl;
+  for (int index = 0; index < inventory.size(); index++) {
+    string titleToSearch = inventory[index]->getTitle();
+    string descriptionToSearch = inventory[index]->getDescription();
+    string concatStringToSearch = titleToSearch + " " + descriptionToSearch;
+    size_t found = concatStringToSearch.find(str);
+    if (found != string::npos) {
+      cout << endl << "Product ID: " << inventory[index]->getIdCode() << endl;
+      cout << "Title: " << inventory[index]->getTitle() << endl;
+      cout << "Description: " << inventory[index]->getDescription()<< endl;
+      cout << "Price : " << inventory[index]->getPrice() << endl << endl;
+    }
+    // size_t found = *inventory.at(index)->find(str);
+      // cout << inventory[index] << endl;
+  }
+}
+
 
 void Store::addProductToMemberCart(string pID, string mID) {
 
@@ -99,6 +113,7 @@ int main() {
   cout << endl << "In Main" << endl;
   cout << "Location of Product 00001: " << newStore.getProductFromID("00001") << endl;
   cout << "Location of Member 700000001: " << newStore.getMemberFromID("70000001") << endl;
+  newStore.productSearch("Ca");
 
   return 0;
 }
