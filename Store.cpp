@@ -39,35 +39,56 @@ Customer* Store::getMemberFromID(string memberID) {
 // prints out that product's title, ID code, price and description
 // the search function will be case insensitive
 void Store::productSearch(string str) {
+  //lowercase the entire string to search
   for(int i; i < str.length(); i++) {
     str[i] = tolower(str[i]);
   }
 
   cout << endl << "Searching for: " << str << endl;
+  //iterate through all items in inventory
   for (int index = 0; index < inventory.size(); index++) {
+
     string titleToSearch = inventory[index]->getTitle();
     string descriptionToSearch = inventory[index]->getDescription();
+    
+    //combine strings to search
     string concatStringToSearch = titleToSearch + " " + descriptionToSearch;
 
+    //make string lowercase
     for (int i = 0; i < concatStringToSearch.length(); i++) {
       concatStringToSearch[i] = tolower(concatStringToSearch[i]);
     }
 
-    size_t found = concatStringToSearch.find(str);
+    size_t found = concatStringToSearch.find(str); //if string is found, print ID/Title/Description/Price
     if (found != string::npos) {
       cout << endl << "Product ID: " << inventory[index]->getIdCode() << endl;
       cout << "Title: " << inventory[index]->getTitle() << endl;
       cout << "Description: " << inventory[index]->getDescription()<< endl;
       cout << "Price : " << inventory[index]->getPrice() << endl << endl;
     }
-    // size_t found = *inventory.at(index)->find(str);
-      // cout << inventory[index] << endl;
   }
 }
 
 
 void Store::addProductToMemberCart(string pID, string mID) {
+    Product* tempProduct = getProductFromID(pID);
+    Customer* tempMember = getMemberFromID(mID);
 
+    if (tempProduct == NULL) {
+      cout << "Product # " << pID << " not found." << endl;
+    }
+
+    if (tempMember == NULL) {
+      cout << "Member # " << mID << " not found." << endl;
+      return;
+    }    
+
+    if ( (*tempProduct).getQuantityAvailable() > 1) {
+      (*tempMember).addProductToCart(pID);
+      cout << "Added Product # " << pID << " to cart, for member # " << mID <<"." << endl << endl;
+    } else {
+      cout << "Sorry, Product # "<< pID << " is currently out of stock." << endl << endl;
+    }
 }
 
 void Store::checkOutMember(string mID) {
@@ -84,7 +105,7 @@ int main() {
   prodToAdd = &newp;
   newStore.addProduct(prodToAdd);
 
-  Product newp2("00002", "Frosted Flakes", "Tony the Tiger's favorite cereal.", 3.99, 20);
+  Product newp2("00002", "Frosted Flakes", "Tony the Tiger's favorite cereal.", 3.99, 0);
   prodToAdd = &newp2;
   newStore.addProduct(prodToAdd);
 
@@ -100,7 +121,7 @@ int main() {
   prodToAdd = &newp5;
   newStore.addProduct(prodToAdd);
 
-  Product newp6("00003", "Cat Brush", "Brush to reduce shedding.", 3.49, 12);
+  Product newp6("00006", "Cat Brush", "Brush to reduce shedding.", 3.49, 12);
   prodToAdd = &newp6;
   newStore.addProduct(prodToAdd); 
 
@@ -122,6 +143,12 @@ int main() {
   cout << "Location of Product 00001: " << newStore.getProductFromID("00001") << endl;
   cout << "Location of Member 700000001: " << newStore.getMemberFromID("70000001") << endl;
   newStore.productSearch("F");
+
+  newStore.addProductToMemberCart("000022", "700000033");
+  newStore.addProductToMemberCart("00002", "70000003");
+  newStore.addProductToMemberCart("00001", "70000003");
+
+
 
   return 0;
 }
