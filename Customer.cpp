@@ -1,3 +1,11 @@
+/****************************************************************
+** Author: Daniel Roteneberg
+** Date: 6/9/2017
+** Description: This program creates class called Customer. Each 
+                customer has a name and account ID. They have the
+                ability to add products to their cart for shopping.
+****************************************************************/
+
 #include "Customer.hpp"
 #include <iostream>
 using std::string;

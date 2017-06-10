@@ -1,3 +1,11 @@
+/****************************************************************
+** Author: Daniel Roteneberg
+** Date: 6/9/2017
+** Description: This program creates class called Product. Each
+                product has an id #, title, description, price,
+                and quantity available.
+****************************************************************/
+
 #include "Product.hpp"
 #include <iostream>
 using std::string;
