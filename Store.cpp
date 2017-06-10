@@ -93,7 +93,8 @@ void Store::addProductToMemberCart(string pID, string mID) {
 
 void Store::checkOutMember(string mID) {
   Customer* tempMember = getMemberFromID(mID);
-
+  double subtotal = 0.0;
+  double shipping = 0.0;
   if (tempMember == NULL) {
     cout << "Member # " << mID << " not found." << endl << endl;
     return;
@@ -105,10 +106,26 @@ void Store::checkOutMember(string mID) {
         cout << "Sorry, product # " << (*cartProduct).getIdCode() << ", ";
         cout << (*cartProduct).getTitle() << " is no longer available." << endl << endl;
       } else { 
-        cout << (*cartProduct).getTitle() << " - " << (*cartProduct).getPrice() << endl;
+        cout << (*cartProduct).getTitle() << " - $" << (*cartProduct).getPrice() << endl;
+        subtotal += (*cartProduct).getPrice();
         (*cartProduct).decreaseQuantity();
       }
     }
+
+    if ((*tempMember).isPremiumMember()) {
+      shipping = 0.0;
+    } else {
+      shipping = (subtotal * 0.07);
+    }
+  }
+
+  if ((*tempMember).getCart().size() > 0) {
+    cout << "Subtotal: $" << subtotal << endl;
+    cout << "Shipping Cost: $" << shipping << endl;
+    cout << "Total: $" << (subtotal + shipping) << endl << endl;
+    (*tempMember).emptyCart();
+  } else {
+    cout << "There are no items in the cart." << endl << endl;
   }
 }
 
@@ -160,14 +177,19 @@ int main() {
   newStore.productSearch("F");
 
   newStore.addProductToMemberCart("000022", "700000033");
-  newStore.addProductToMemberCart("00002", "70000003");
-  newStore.addProductToMemberCart("00001", "70000003");
+  newStore.addProductToMemberCart("00002", "70000001");
+  newStore.addProductToMemberCart("00005", "70000001");
+  newStore.addProductToMemberCart("00006", "70000002");
+  newStore.addProductToMemberCart("00003", "70000002");
+  newStore.addProductToMemberCart("00001", "70000002");
   newStore.addProductToMemberCart("00001", "70000003");
   newStore.addProductToMemberCart("00001", "70000003");
 
   newStore.checkOutMember("57832550");
+  newStore.checkOutMember("70000001");
+  newStore.checkOutMember("70000002");
   newStore.checkOutMember("70000003");
-
+  newStore.checkOutMember("70000003");
 
   return 0;
 }
