@@ -83,7 +83,7 @@ void Store::addProductToMemberCart(string pID, string mID) {
       return;
     }    
 
-    if ( (*tempProduct).getQuantityAvailable() > 1) {
+    if ( (*tempProduct).getQuantityAvailable() >= 1) {
       (*tempMember).addProductToCart(pID);
       cout << "Added Product # " << pID << " to cart, for member # " << mID <<"." << endl << endl;
     } else {
@@ -92,7 +92,24 @@ void Store::addProductToMemberCart(string pID, string mID) {
 }
 
 void Store::checkOutMember(string mID) {
+  Customer* tempMember = getMemberFromID(mID);
 
+  if (tempMember == NULL) {
+    cout << "Member # " << mID << " not found." << endl << endl;
+    return;
+  } else {
+    vector<string> custCart = (*tempMember).getCart();
+    for (int item = 0; item < custCart.size(); item++) {
+      Product* cartProduct = getProductFromID(custCart[item]);
+      if ( (*cartProduct).getQuantityAvailable() < 1) {
+        cout << "Sorry, product # " << (*cartProduct).getIdCode() << ", ";
+        cout << (*cartProduct).getTitle() << " is no longer available." << endl << endl;
+      } else { 
+        cout << (*cartProduct).getTitle() << " - " << (*cartProduct).getPrice() << endl;
+        (*cartProduct).decreaseQuantity();
+      }
+    }
+  }
 }
 
 
@@ -101,7 +118,7 @@ int main() {
   Product* prodToAdd;
   Customer* custToAdd;
 
-  Product newp("00001", "Cheese Whiz", "Great on crackers!", 4.99, 10);
+  Product newp("00001", "Cheese Whiz", "Great on crackers!", 4.99, 2);
   prodToAdd = &newp;
   newStore.addProduct(prodToAdd);
 
@@ -138,8 +155,6 @@ int main() {
   custToAdd = &newCust3;
   newStore.addMember(custToAdd);  
 
-
-  cout << endl << "In Main" << endl;
   cout << "Location of Product 00001: " << newStore.getProductFromID("00001") << endl;
   cout << "Location of Member 700000001: " << newStore.getMemberFromID("70000001") << endl;
   newStore.productSearch("F");
@@ -147,7 +162,11 @@ int main() {
   newStore.addProductToMemberCart("000022", "700000033");
   newStore.addProductToMemberCart("00002", "70000003");
   newStore.addProductToMemberCart("00001", "70000003");
+  newStore.addProductToMemberCart("00001", "70000003");
+  newStore.addProductToMemberCart("00001", "70000003");
 
+  newStore.checkOutMember("57832550");
+  newStore.checkOutMember("70000003");
 
 
   return 0;
